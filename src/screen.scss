@@ -1,3 +1,4 @@
+@import 'common';
 .gameView{
   margin:1rem;
   padding:1rem;
@@ -18,16 +19,16 @@
 .btn__container{
   height:5rem;
 }
-.btn{
-  padding:0.5rem;
-  border:none;
-  cursor: pointer;
-  &--back{
-    background-color: coral;
-  }
 
+.btn--back{
+  background-color: coral;
 }
-
+.btn--again{
+  background-color: blueviolet;
+}
+.btn--replay{
+  background-color: rgb(54, 209, 93);
+}
 
 .gameResult{
   width: 15rem;

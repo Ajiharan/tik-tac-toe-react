@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Square from "./Square";
 import "./screen.scss";
 const Screen = function () {
@@ -88,6 +88,8 @@ const Screen = function () {
   const resumeGame = () => {
     setPreviewMode(false);
   };
+
+  const replayGame = () => {};
   return (
     <div className="gameView">
       <div className="btn__container">
@@ -120,7 +122,12 @@ const Screen = function () {
           {isFinished ? (
             <div>
               <p>player {currentPlayer} wins</p>
-              <button onClick={newGame}>Play Again</button>
+              <button className="btn btn--again" onClick={newGame}>
+                Play Again
+              </button>
+              <button className="btn btn--replay" onClick={replayGame}>
+                Replay
+              </button>
             </div>
           ) : (
             <React.Fragment>
