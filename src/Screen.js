@@ -4,7 +4,8 @@ import "./screen.scss";
 const Screen = function () {
   const [squares, setSquares] = useState(new Array(9).fill(null));
   const [currentPlayer, setCurrentPlayer] = useState("O");
-
+  const [isFinished, setFinished] = useState(false);
+  const [playerDetails, setPlayerDetails] = useState([]);
   const checkXMatch = (i, temp) => {
     while (i <= 6) {
       if (temp[i] && temp[i] === temp[i + 1] && temp[i + 1] === temp[i + 2]) {
@@ -43,8 +44,10 @@ const Screen = function () {
   };
 
   const updateSquares = (index) => {
+    if (squares[index]) return;
     const temp = squares.slice();
     temp[index] = currentPlayer;
+    setPlayerDetails([...playerDetails, { index, currentPlayer }]);
 
     if (
       checkXMatch(0, temp) ||
@@ -52,24 +55,41 @@ const Screen = function () {
       checkCrossMatch(0, temp)
     ) {
       console.log("match finished");
-    }
-    if (currentPlayer === "O") {
-      setCurrentPlayer("X");
+      setFinished(true);
     } else {
-      setCurrentPlayer("O");
+      if (currentPlayer === "O") {
+        setCurrentPlayer("X");
+      } else {
+        setCurrentPlayer("O");
+      }
     }
+
     setSquares(temp);
   };
   return (
-    <div className="squares">
-      {squares.map((player, i) => (
-        <Square
-          key={i}
-          index={i}
-          player={player}
-          updateSquares={updateSquares}
-        />
-      ))}
+    <div className="game">
+      <div className="squares">
+        {squares.map((player, i) => (
+          <Square
+            key={i}
+            isFinished={isFinished}
+            index={i}
+            player={player}
+            updateSquares={updateSquares}
+          />
+        ))}
+      </div>
+      <div className="result">
+        {isFinished ? (
+          <p>player {currentPlayer} wins</p>
+        ) : (
+          playerDetails.map(({ index, currentPlayer }) => (
+            <p key={index}>
+              player {currentPlayer} take [{index}] position
+            </p>
+          ))
+        )}
+      </div>
     </div>
   );
 };
