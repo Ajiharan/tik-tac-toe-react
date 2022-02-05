@@ -84,41 +84,61 @@ const Screen = function () {
     setPreviewMode(true);
     setCurrentIndex(i);
   };
+
+  const resumeGame = () => {
+    setPreviewMode(false);
+  };
   return (
-    <div className="game">
-      <div className="squares">
-        {!isPreviewMode
-          ? squares.map((player, i) => (
-              <Square
-                key={i}
-                isFinished={isFinished}
-                index={i}
-                player={player}
-                updateSquares={updateSquares}
-              />
-            ))
-          : playerDetails[currentIndex]?.squares.map((player, i) => (
-              <Square key={i} isFinished={true} index={i} player={player} />
-            ))}
-      </div>
-      <div className="result">
-        {isFinished ? (
-          <div>
-            <p>player {currentPlayer} wins</p>
-            <button onClick={newGame}>Play Again</button>
-          </div>
-        ) : (
-          playerDetails.map(({ index, currentPlayer }) => (
-            <p
-              key={index}
-              onClick={() => {
-                previewSquares(index);
-              }}
-            >
-              player {currentPlayer} take [{index}] position
-            </p>
-          ))
+    <div className="gameView">
+      <div className="btn__container">
+        {isPreviewMode && (
+          <button onClick={resumeGame} className="btn btn--back">
+            Back To Game
+          </button>
         )}
+      </div>
+
+      <div className="game">
+        <div className="squares">
+          {!isPreviewMode
+            ? squares.map((player, i) => (
+                <Square
+                  key={i}
+                  isFinished={isFinished}
+                  index={i}
+                  player={player}
+                  updateSquares={updateSquares}
+                />
+              ))
+            : playerDetails
+                .find(({ index }) => index === currentIndex)
+                ?.squares.map((player, i) => (
+                  <Square key={i} isFinished={true} index={i} player={player} />
+                ))}
+        </div>
+        <div className="gameResult">
+          {isFinished ? (
+            <div>
+              <p>player {currentPlayer} wins</p>
+              <button onClick={newGame}>Play Again</button>
+            </div>
+          ) : (
+            <React.Fragment>
+              <h5 className="gameResult__heading"> Player Details</h5>
+              {playerDetails.reverse().map(({ index, currentPlayer }) => (
+                <p
+                  key={index}
+                  onClick={() => {
+                    previewSquares(index);
+                  }}
+                  className="gameResult__detail"
+                >
+                  player {currentPlayer} take [{index}] position
+                </p>
+              ))}
+            </React.Fragment>
+          )}
+        </div>
       </div>
     </div>
   );
