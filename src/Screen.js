@@ -47,7 +47,10 @@ const Screen = function () {
     if (squares[index]) return;
     const temp = squares.slice();
     temp[index] = currentPlayer;
-    setPlayerDetails([...playerDetails, { index, currentPlayer }]);
+    setPlayerDetails([
+      ...playerDetails,
+      { index, currentPlayer, squares: temp }
+    ]);
 
     if (
       checkXMatch(0, temp) ||
@@ -66,6 +69,13 @@ const Screen = function () {
 
     setSquares(temp);
   };
+
+  const newGame = () => {
+    setSquares(new Array(9).fill(null));
+    setCurrentPlayer("O");
+    setFinished(false);
+    setPlayerDetails([]);
+  };
   return (
     <div className="game">
       <div className="squares">
@@ -81,7 +91,10 @@ const Screen = function () {
       </div>
       <div className="result">
         {isFinished ? (
-          <p>player {currentPlayer} wins</p>
+          <div>
+            <p>player {currentPlayer} wins</p>
+            <button onClick={newGame}>Play Again</button>
+          </div>
         ) : (
           playerDetails.map(({ index, currentPlayer }) => (
             <p key={index}>
