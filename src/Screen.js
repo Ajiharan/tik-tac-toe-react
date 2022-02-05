@@ -6,6 +6,9 @@ const Screen = function () {
   const [currentPlayer, setCurrentPlayer] = useState("O");
   const [isFinished, setFinished] = useState(false);
   const [playerDetails, setPlayerDetails] = useState([]);
+  const [isPreviewMode, setPreviewMode] = useState(false);
+  const [currentIndex, setCurrentIndex] = useState(0);
+
   const checkXMatch = (i, temp) => {
     while (i <= 6) {
       if (temp[i] && temp[i] === temp[i + 1] && temp[i + 1] === temp[i + 2]) {
@@ -76,18 +79,27 @@ const Screen = function () {
     setFinished(false);
     setPlayerDetails([]);
   };
+
+  const previewSquares = (i) => {
+    setPreviewMode(true);
+    setCurrentIndex(i);
+  };
   return (
     <div className="game">
       <div className="squares">
-        {squares.map((player, i) => (
-          <Square
-            key={i}
-            isFinished={isFinished}
-            index={i}
-            player={player}
-            updateSquares={updateSquares}
-          />
-        ))}
+        {!isPreviewMode
+          ? squares.map((player, i) => (
+              <Square
+                key={i}
+                isFinished={isFinished}
+                index={i}
+                player={player}
+                updateSquares={updateSquares}
+              />
+            ))
+          : playerDetails[currentIndex]?.squares.map((player, i) => (
+              <Square key={i} isFinished={true} index={i} player={player} />
+            ))}
       </div>
       <div className="result">
         {isFinished ? (
@@ -97,7 +109,12 @@ const Screen = function () {
           </div>
         ) : (
           playerDetails.map(({ index, currentPlayer }) => (
-            <p key={index}>
+            <p
+              key={index}
+              onClick={() => {
+                previewSquares(index);
+              }}
+            >
               player {currentPlayer} take [{index}] position
             </p>
           ))
