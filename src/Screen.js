@@ -11,7 +11,6 @@ const Screen = function () {
   const [playerDetails, setPlayerDetails] = useState([]);
   const [isPreviewMode, setPreviewMode] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(0);
-
   const { checkCrossMatch, checkXMatch, checkYMatch } = useRules();
 
   const updateSquares = (index) => {
