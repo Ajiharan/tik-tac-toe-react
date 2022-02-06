@@ -1,4 +1,5 @@
 import React from "react";
+import ErrorBoundary from "./ErrorBoundary";
 import PlayerDetail from "./PlayerDetail";
 
 const GameResult = function ({
@@ -22,10 +23,12 @@ const GameResult = function ({
           </button>
         </div>
       ) : (
-        <PlayerDetail
-          playerDetails={playerDetails}
-          previewSquares={previewSquares}
-        />
+        <ErrorBoundary>
+          <PlayerDetail
+            playerDetails={playerDetails}
+            previewSquares={previewSquares}
+          />
+        </ErrorBoundary>
       )}
     </div>
   );

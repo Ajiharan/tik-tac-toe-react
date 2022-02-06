@@ -3,6 +3,7 @@ import Square from "./Square";
 import "./screen.scss";
 import useRules from "./useRules";
 import GameResult from "./GameResult";
+import ErrorBoundary from "./ErrorBoundary";
 const Screen = function () {
   const [squares, setSquares] = useState(new Array(9).fill(null));
   const [currentPlayer, setCurrentPlayer] = useState("O");
@@ -68,23 +69,31 @@ const Screen = function () {
       </div>
 
       <div className="game">
-        <div className="squares">
-          {!isPreviewMode
-            ? squares.map((player, i) => (
-                <Square
-                  key={i}
-                  isFinished={isFinished}
-                  index={i}
-                  player={player}
-                  updateSquares={updateSquares}
-                />
-              ))
-            : playerDetails
-                .find(({ index }) => index === currentIndex)
-                ?.squares.map((player, i) => (
-                  <Square key={i} isFinished={true} index={i} player={player} />
-                ))}
-        </div>
+        <ErrorBoundary>
+          <div className="squares">
+            {!isPreviewMode
+              ? squares.map((player, i) => (
+                  <Square
+                    key={i}
+                    isFinished={isFinished}
+                    index={i}
+                    player={player}
+                    updateSquares={updateSquares}
+                  />
+                ))
+              : playerDetails
+                  .find(({ index }) => index === currentIndex)
+                  ?.squares.map((player, i) => (
+                    <Square
+                      key={i}
+                      isFinished={true}
+                      index={i}
+                      player={player}
+                    />
+                  ))}
+          </div>
+        </ErrorBoundary>
+
         <GameResult
           replayGame={replayGame}
           newGame={newGame}
