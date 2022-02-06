@@ -1,6 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import Square from "./Square";
 import "./screen.scss";
+import useRules from "./useRules";
+import GameResult from "./GameResult";
 const Screen = function () {
   const [squares, setSquares] = useState(new Array(9).fill(null));
   const [currentPlayer, setCurrentPlayer] = useState("O");
@@ -9,42 +11,7 @@ const Screen = function () {
   const [isPreviewMode, setPreviewMode] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(0);
 
-  const checkXMatch = (i, temp) => {
-    while (i <= 6) {
-      if (temp[i] && temp[i] === temp[i + 1] && temp[i + 1] === temp[i + 2]) {
-        return true;
-      }
-      i = (i + 1) * 3;
-    }
-    return false;
-  };
-  const checkYMatch = (i, temp) => {
-    while (i <= 2) {
-      if (temp[i] && temp[i] === temp[i + 3] && temp[i + 3] === temp[i + 6]) {
-        return true;
-      }
-      i = i + 1;
-    }
-    return false;
-  };
-  const checkCrossMatch = (i, temp) => {
-    if (
-      temp[i] === temp[(i + 1) * 4] &&
-      temp[(i + 1) * 4] === temp[(i + 2) * 4] &&
-      temp[i]
-    ) {
-      return true;
-    }
-    i = 2;
-    if (
-      temp[i] &&
-      temp[i] === temp[i * 2] &&
-      temp[i * 2] === temp[(i + 1) * 2]
-    ) {
-      return true;
-    }
-    return false;
-  };
+  const { checkCrossMatch, checkXMatch, checkYMatch } = useRules();
 
   const updateSquares = (index) => {
     if (squares[index]) return;
@@ -118,34 +85,14 @@ const Screen = function () {
                   <Square key={i} isFinished={true} index={i} player={player} />
                 ))}
         </div>
-        <div className="gameResult">
-          {isFinished ? (
-            <div>
-              <p>player {currentPlayer} wins</p>
-              <button className="btn btn--again" onClick={newGame}>
-                Play Again
-              </button>
-              <button className="btn btn--replay" onClick={replayGame}>
-                Replay
-              </button>
-            </div>
-          ) : (
-            <React.Fragment>
-              <h5 className="gameResult__heading"> Player Details</h5>
-              {playerDetails.reverse().map(({ index, currentPlayer }) => (
-                <p
-                  key={index}
-                  onClick={() => {
-                    previewSquares(index);
-                  }}
-                  className="gameResult__detail"
-                >
-                  player {currentPlayer} take [{index}] position
-                </p>
-              ))}
-            </React.Fragment>
-          )}
-        </div>
+        <GameResult
+          replayGame={replayGame}
+          newGame={newGame}
+          currentPlayer={currentPlayer}
+          isFinished={isFinished}
+          playerDetails={playerDetails}
+          previewSquares={previewSquares}
+        />
       </div>
     </div>
   );
