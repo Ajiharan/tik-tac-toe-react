@@ -1,5 +1,5 @@
 import "./styles.scss";
-import Screen from "./Screen.js";
+
 import NewScreen from "./NewScreen";
 
 export default function App() {
